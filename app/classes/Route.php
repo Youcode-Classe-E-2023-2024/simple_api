@@ -37,6 +37,8 @@ class Route
     /**
      * Permettra de capturer l'url avec les paramètre
      * get('/posts/:slug-:id') par exemple
+     * @param string $url
+     * @return bool
      **/
     public function match($url){
         $url = trim($url, '/');
@@ -64,7 +66,8 @@ class Route
     public function call(){
         if(is_string($this->callable)){
             $params = explode('#', $this->callable);
-            $controller = "App\\Controller\\" . $params[0] . "Controller";
+            $controller = $params[0] . "Controller";
+            require_once __DIR__ . "/../controllers/" . $controller . ".php";
             $controller = new $controller();
 
             return call_user_func_array([$controller, $params[1]], $this->matches);
